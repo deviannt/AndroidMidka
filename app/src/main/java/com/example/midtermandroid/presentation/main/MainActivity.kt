@@ -1,9 +1,10 @@
-package com.example.midtermandroid
+package com.example.midtermandroid.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,12 +20,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.midtermandroid.R
+import com.example.midtermandroid.presentation.second.SecondActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyHobbyScreen {
+            MyHobbyScreen(
+                title = viewModel.title,
+                buttonText = viewModel.buttonText
+            ) {
                 startActivity(Intent(this, SecondActivity::class.java))
             }
         }
@@ -32,7 +43,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyHobbyScreen(onNavigateToSecond: () -> Unit) {
+fun MyHobbyScreen(
+    title: String,
+    buttonText: String,
+    onNavigateToSecond: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +70,7 @@ fun MyHobbyScreen(onNavigateToSecond: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Online Games",
+                text = title,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -75,7 +90,7 @@ fun MyHobbyScreen(onNavigateToSecond: () -> Unit) {
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.shadow(8.dp, RoundedCornerShape(16.dp))
             ) {
-                Text(text = "Перейти ко второму экрану", fontSize = 18.sp, color = Color.White)
+                Text(text = buttonText, fontSize = 18.sp, color = Color.White)
             }
         }
     }
